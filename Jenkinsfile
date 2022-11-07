@@ -1,14 +1,18 @@
 pipeline {
     agent any
+    parameters {
+        url = "cbjenkins-fm.devtools.intel.com/teams-dcai-dpea-paiv"
+        string(name: 'job_name', defaultValue: '', description: '')
+        string(name: 'token', defaultValue: '', description: '')
+        string(name: 'parameters', defaultValue: '', description: '')
+        string(name: 'parameter_values', defaultValue: '', description: '')
+    }
     stages {
-        stage('install jenkins') {
-            steps {
-                sh 'pip3 install python-jenkins --proxy http://proxy-dmz.intel.com:911'
-            }
-        }
         stage('run script') {
             steps {
-                sh 'python3 api_trigger.py'
+                withCredentials([usernamePassword(credentialsId: 'mycreds', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                    sh 'python3 api_trigger.py -u $USERNAME -p $PASSWORD --url ${params.url} --job_name ${params.job_name} --token ${params.token}'
+                }
             }
         }
     }
