@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('run script') {
             steps {
-            sh 'python api_trigger.py'
+                sh 'python3 api_trigger.py'
             }
         }
     }
