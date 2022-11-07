@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('install jenkins') {
             steps {
-                sh 'pip3 install jenkins --proxy http://proxy-dmz.intel.com:911'
+                sh 'pip3 install python-jenkins --proxy http://proxy-dmz.intel.com:911'
             }
         }
         stage('run script') {
