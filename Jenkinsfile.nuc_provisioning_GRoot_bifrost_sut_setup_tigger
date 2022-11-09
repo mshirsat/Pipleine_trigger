@@ -7,6 +7,8 @@ pipeline {
     }
 
     parameters {
+        string(name: 'job_name', defaultValue: '', description: 'Enter the pipeline path')
+        string(name: 'token', defaultValue: '', description: 'Enter the authentication token')
         string(name: 'SYSTEM_IDs', defaultValue: '', description: 'Enter comma separated system IDs')
         password(name: 'GIT_PERSONAL_ACCESS_TOKEN', description: 'Enter your Git personal Access Token')
         password(name: 'ONE_CLOUD_API_TOKEN', description: 'Enter your One Cloud API Token')
