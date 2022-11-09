@@ -1,5 +1,6 @@
 import jenkins
 import time
+import json
 import os
 import argparse
 import sys
@@ -25,10 +26,7 @@ def setup_argparse():
 	parser.add_argument("--job_name", dest='NAME_OF_JOB', help="Enter pipeline name", required=True)
 	parser.add_argument("--token", dest='TOKEN_NAME', help="Enter token name", required=True)
 	parser.add_argument("--parameters", nargs="+", dest='PARAMETERS', help="Enter paramters")
-	parser.add_argument("--parameter_values", nargs="+", dest='PARAMS_VAL', help="Enter paramter values in same sequence)")
 	ret = parser.parse_args(args)
-	if (ret.PARAMETERS is not None and ret.PARAMS_VAL is None):
-		parser.error("--parameter_values must be passed with --parameters")
 	return ret
 
 class DevOpsJenkins:
@@ -67,11 +65,7 @@ class DevOpsJenkins:
 
 if __name__ == "__main__":
 	args = setup_argparse()
-	PARAMS = {}
-	if args.PARAMETERS and (len(args.PARAMETERS) == len(args.PARAMS_VAL)):
-		for i in range(len(args.PARAMETERS)):
-			PARAMS[args.PARAMETERS[i]] = args.PARAMS_VAL[i]
 	jenkins_obj = DevOpsJenkins(args.NAME_OF_JOB, args.TOKEN_NAME)
-	output = jenkins_obj.build_job(PARAMS)
+	output = jenkins_obj.build_job(json.loads(args.PARAMETERS))
 	print ("Jenkins Build URL: {}".format(output['url']))
 	print ("Jenkins Build result: {}".format(output['result']))
