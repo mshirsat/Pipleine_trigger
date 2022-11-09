@@ -1,0 +1,30 @@
+#!groovy
+def hosts_file = 'hosts/nuc_ww42.json'
+def hosts_file_sut = 'hosts/sut_ww42.json'
+
+pipeline {
+    agent { label 'ansible'
+    }
+
+    parameters {
+        string(name: 'SYSTEM_IDs', defaultValue: '', description: 'Enter comma separated system IDs')
+        password(name: 'GIT_PERSONAL_ACCESS_TOKEN', description: 'Enter your Git personal Access Token')
+        password(name: 'ONE_CLOUD_API_TOKEN', description: 'Enter your One Cloud API Token')
+        string(name: 'HSDES_USERNAME', description: 'Enter your HSDES Username')
+        password(name: 'HSDES_SERVICE_TOKEN', description: 'Enter your HSDES Service Token')
+        string(name: 'HSDES_PLAN_ID', defaultValue: '16017352061', description: 'Enter the HSDES PlanID used by GRoot BL')
+        string(name: 'PROXY', defaultValue: 'http://proxy-dmz.intel.com:912', description: 'Enter the PROXY URL you want to set')
+        choice(choices: ['windows','linux'], name: 'SUT_OS_TYPE', description: 'Choose the NUC OS type')
+        choice(choices: ['True','False'], name: 'is_RASP_LAB', description: 'Choose if the NUC is a RASP machine')
+    }
+
+    stages {
+        stage('run script') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'MAHESH_API', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                    sh "python3 api_trigger.py -u $USERNAME -p $PASSWORD --url \"https://cbjenkins-fm.devtools.intel.com/teams-dcai-dpea-paiv\" --job_name ${params.job_name} --token ${params.token} --parameters '${params}'"
+                }
+            }
+        }
+    }
+}
