@@ -66,7 +66,6 @@ class DevOpsJenkins:
 if __name__ == "__main__":
 	args = setup_argparse()
 	jenkins_obj = DevOpsJenkins(args.NAME_OF_JOB, args.TOKEN_NAME)
-	print(args.PARAMETERS, type(args.PARAMETERS))
-	output = jenkins_obj.build_job(json.loads(str(args.PARAMETERS)))
+	output = jenkins_obj.build_job(json.loads(args.PARAMETERS[0]))
 	print ("Jenkins Build URL: {}".format(output['url']))
 	print ("Jenkins Build result: {}".format(output['result']))
