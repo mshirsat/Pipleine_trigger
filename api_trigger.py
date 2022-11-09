@@ -25,7 +25,7 @@ def setup_argparse():
 	parser.add_argument("--url", dest='URL', help="Enter jenkins URL", required=True)
 	parser.add_argument("--job_name", dest='NAME_OF_JOB', help="Enter pipeline name", required=True)
 	parser.add_argument("--token", dest='TOKEN_NAME', help="Enter token name", required=True)
-	parser.add_argument("--parameters", nargs="+", dest='PARAMETERS', help="Enter paramters")
+	parser.add_argument("--parameters", dest='PARAMETERS', help="Enter paramters")
 	ret = parser.parse_args(args)
 	return ret
 
@@ -66,6 +66,6 @@ class DevOpsJenkins:
 if __name__ == "__main__":
 	args = setup_argparse()
 	jenkins_obj = DevOpsJenkins(args.NAME_OF_JOB, args.TOKEN_NAME)
-	output = jenkins_obj.build_job(json.loads(args.PARAMETERS[0]))
+	output = jenkins_obj.build_job(json.loads(args.PARAMETERS))
 	print ("Jenkins Build URL: {}".format(output['url']))
 	print ("Jenkins Build result: {}".format(output['result']))
